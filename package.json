@@ -1,0 +1,33 @@
+{
+  "name": "mqtt-node",
+  "description": "MQTT node for the M3tering protocol ",
+  "version": "1.0.0",
+  "author": "iChristwin",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@chirpstack/chirpstack-api": "^4.7.0",
+    "@grpc/grpc-js": "^1.10.3",
+    "ethers": "^6.11.1",
+    "m3tering-ed25519": "^1.0.1",
+    "m3tering-ethers": "^1.0.1",
+    "m3ters": "^1.0.4",
+    "nes.css": "^2.3.0",
+    "next": "14.1.3",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.3",
+    "typescript": "^5"
+  }
+}
