@@ -11,7 +11,28 @@ const PS2P = Press_Start_2P({ weight: "400", subsets: ["latin"] });
 
 export default function Home() {
   const [isConnected, setConnection] = useState(false);
+  const [isTable, setTable] = useState(false);
 
+  const isBrowser = () => typeof window !== "undefined"; //The approach recommended by Next.js
+
+  function toggleTable() {
+    var scroll = document.getElementById("scroll");
+    var table = document.getElementById("m3ter-table");
+    if (!table || !scroll) return;
+    if (isTable) {
+      table.style.display = "none";
+      scroll.style.display = "none";
+      setTable(false);
+    } else {
+      table.style.display = "block";
+      scroll.style.display = "block";
+      setTable(true);
+    }
+  }
+  function scrollToTop() {
+    if (!isBrowser()) return;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
   const getProvider = async () => {
     if (window.ethereum == null) {
       provider = new ethers.JsonRpcProvider("https://rpc.gnosischain.com");
@@ -23,27 +44,131 @@ export default function Home() {
   };
 
   return (
-    <div className={PS2P.className}>
-      <div className="nes-container is-dark">
+    <div className={PS2P.className} style={{ height: "100vh" }}>
+      <div
+        style={{
+          paddingBlockEnd: 500,
+          backgroundImage: `url("/8-bit-13.jpg")`,
+          backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed",
+          backgroundSize: "100% 100%",
+        }}
+      >
         <div
-          className="nes-container is-centered is-dark"
-          style={{ borderColor: "#0000", paddingBlockStart: 40, paddingBlockEnd: 90 }}
+          className="nes-container is-centered"
+          style={{
+            borderColor: "#0000",
+            paddingBlockStart: 40,
+            paddingBlockEnd: 90,
+          }}
         >
+          <div className="message-list">
+            <div className="message -left">
               <Image
                 alt="Welcome"
-                width={200}
-                height={200}
-                src="/api/m3ter-head/0x28e020883fd539c56538b687b813fee3792911fa"
+                width={60}
+                height={60}
+                src="/twitter-avatar.png"
+                className="nes-avatar"
+                style={{ imageRendering: "pixelated", height: 300, width: 300 }}
               />
-          <h2>Welcome to the Protocol</h2>
+              <div className="nes-balloon from-left">
+                <h2>Hello there</h2>
+                <h3> 0x4f...319</h3>
+              </div>
+            </div>
+          </div>
         </div>
         <div
-          className="nes-container is-dark"
+          className="nes-container"
           style={{ borderColor: "#0000", paddingBlockEnd: 120 }}
         >
           <div>
-            <div className="nes-table-responsive">
-              <table className="nes-table is-bordered is-dark">
+            <div>
+              <div>
+                {isTable ? (
+                  <div style={{ float: "right" }}>
+                    <button className="nes-btn is-error" onClick={toggleTable}>
+                      <i className="nes-icon close is-small"></i>
+                    </button>
+                  </div>
+                ) : (
+                  <div style={{ float: "right" }}>
+                    <button
+                      className="nes-btn"
+                      style={{ backgroundColor: "#eee" }}
+                      onClick={toggleTable}
+                    >
+                      <div>
+                        <Image
+                          alt="Welcome"
+                          width={60}
+                          height={60}
+                          src="/api/m3ter-head/pretty"
+                          className="nes-avatar"
+                        />
+                        <Image
+                          alt="Welcome"
+                          width={60}
+                          height={60}
+                          src="/api/m3ter-head/new"
+                          className="nes-avatar"
+                        />
+                      </div>
+                      <div>
+                        <Image
+                          alt="Welcome"
+                          width={60}
+                          height={60}
+                          src="/api/m3ter-head/blob"
+                          className="nes-avatar"
+                        />
+                        <Image
+                          alt="Welcome"
+                          width={60}
+                          height={60}
+                          src="/api/m3ter-head/now"
+                          className="nes-avatar"
+                        />
+                      </div>
+                    </button>
+                    <p>M3ters</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div
+              className="nes-table-responsive"
+              id="m3ter-table"
+              style={{ padding: "auto", display: "none" }}
+            >
+              <div className="nes-container" style={{ borderColor: "#0000" }}>
+                <div className="nes-field is-inline">
+                  <input
+                    type="text"
+                    id="name_field"
+                    className="nes-input"
+                    placeholder="tokenId"
+                  />
+                  <button
+                    type="button"
+                    className="nes-btn is-warning"
+                    onClick={getProvider}
+                  >
+                    + Add M3ter
+                  </button>
+                  <label style={{ textAlign: "center" }}>
+                    <input
+                      type="checkbox"
+                      className="nes-checkbox"
+                      defaultChecked={false}
+                    />
+                    <span>sudo</span>
+                  </label>
+                </div>
+              </div>
+              <table className="nes-table is-bordered">
                 <thead className="nes-container is-centered">
                   <tr>
                     <th>M3ter</th>
@@ -53,7 +178,7 @@ export default function Home() {
                 </thead>
                 <tbody>
                   <tr>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <Image
                         className="nes-avatar is-medium "
                         alt="Gravatar image example"
@@ -61,21 +186,24 @@ export default function Home() {
                         height={100}
                         src="/api/m3ter-head/strange"
                       />
-                      <span> ID: 3</span>
+                      <span> #3</span>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <p style={{ color: "gray" }}>
                         tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
                       </p>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
-                      <a href="https://sonar.warp.cc/#/app/contract/Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po?network=mainnet">
-                        Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po
+                    <td style={{ padding: 15 }}>
+                      <a
+                        target="sonar"
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
+                        bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <Image
                         className="nes-avatar is-medium "
                         alt="Gravatar image example"
@@ -83,21 +211,24 @@ export default function Home() {
                         height={100}
                         src="/api/m3ter-head/new"
                       />
-                      <span> ID: 4</span>
+                      <span> #4</span>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <p style={{ color: "gray" }}>
                         tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
                       </p>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
-                      <a href="https://sonar.warp.cc/#/app/contract/Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po?network=mainnet">
-                        Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po
+                    <td style={{ padding: 15 }}>
+                      <a
+                        target="sonar"
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
+                        bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <Image
                         className="nes-avatar is-medium "
                         alt="Gravatar image example"
@@ -105,21 +236,24 @@ export default function Home() {
                         height={100}
                         src="/api/m3ter-head/world"
                       />
-                      <span> ID: 5</span>
+                      <span> #5</span>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <p style={{ color: "gray" }}>
                         tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
                       </p>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
-                      <a href="https://sonar.warp.cc/#/app/contract/Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po?network=mainnet">
-                        Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po
+                    <td style={{ padding: 15 }}>
+                      <a
+                        target="sonar"
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
+                        bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <Image
                         className="nes-avatar is-medium "
                         alt="Gravatar image example"
@@ -127,21 +261,24 @@ export default function Home() {
                         height={100}
                         src="/api/m3ter-head/nice"
                       />
-                      <span> ID: 6</span>
+                      <span> #6</span>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <p style={{ color: "gray" }}>
                         tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
                       </p>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
-                      <a href="https://sonar.warp.cc/#/app/contract/Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po?network=mainnet">
-                        Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po
+                    <td style={{ padding: 15 }}>
+                      <a
+                        target="sonar"
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
+                        bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <Image
                         className="nes-avatar is-medium "
                         alt="Gravatar image example"
@@ -149,21 +286,24 @@ export default function Home() {
                         height={100}
                         src="/api/m3ter-head/crazy"
                       />
-                      <span> ID: 7</span>
+                      <span> #7</span>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <p style={{ color: "gray" }}>
                         tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
                       </p>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
-                      <a href="https://sonar.warp.cc/#/app/contract/Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po?network=mainnet">
-                        Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po
+                    <td style={{ padding: 15 }}>
+                      <a
+                        target="sonar"
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
+                        bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <Image
                         className="nes-avatar is-medium "
                         alt="Gravatar image example"
@@ -171,21 +311,24 @@ export default function Home() {
                         height={100}
                         src="/api/m3ter-head/moon"
                       />
-                      <span> ID: 8</span>
+                      <span> #8</span>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <p style={{ color: "gray" }}>
                         tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
                       </p>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
-                      <a href="https://sonar.warp.cc/#/app/contract/Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po?network=mainnet">
-                        Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po
+                    <td style={{ padding: 15 }}>
+                      <a
+                        target="sonar"
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
+                        bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <Image
                         className="nes-avatar is-medium "
                         alt="Gravatar image example"
@@ -193,21 +336,24 @@ export default function Home() {
                         height={100}
                         src="/api/m3ter-head/odd"
                       />
-                      <span> ID: 9</span>
+                      <span> #9</span>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <p style={{ color: "gray" }}>
                         tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
                       </p>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
-                      <a href="https://sonar.warp.cc/#/app/contract/Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po?network=mainnet">
-                        Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po
+                    <td style={{ padding: 15 }}>
+                      <a
+                        target="sonar"
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
+                        bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <Image
                         className="nes-avatar is-medium "
                         alt="Gravatar image example"
@@ -215,21 +361,24 @@ export default function Home() {
                         height={100}
                         src="/api/m3ter-head/old"
                       />
-                      <span> ID: 10</span>
+                      <span> #10</span>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <p style={{ color: "gray" }}>
                         tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
                       </p>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
-                      <a href="https://sonar.warp.cc/#/app/contract/Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po?network=mainnet">
-                        Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po
+                    <td style={{ padding: 15 }}>
+                      <a
+                        target="sonar"
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
+                        bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <Image
                         className="nes-avatar is-medium "
                         alt="Gravatar image example"
@@ -237,21 +386,24 @@ export default function Home() {
                         height={100}
                         src="/api/m3ter-head/space"
                       />
-                      <span> ID: 11</span>
+                      <span> #11</span>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <p style={{ color: "gray" }}>
                         tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
                       </p>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
-                      <a href="https://sonar.warp.cc/#/app/contract/Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po?network=mainnet">
-                        Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po
+                    <td style={{ padding: 15 }}>
+                      <a
+                        target="sonar"
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
+                        bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <Image
                         className="nes-avatar is-medium "
                         alt="Gravatar image example"
@@ -259,21 +411,24 @@ export default function Home() {
                         height={100}
                         src="/api/m3ter-head/fine"
                       />
-                      <span> ID: 12</span>
+                      <span> #12</span>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <p style={{ color: "gray" }}>
                         tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
                       </p>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
-                      <a href="https://sonar.warp.cc/#/app/contract/Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po?network=mainnet">
-                        Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po
+                    <td style={{ padding: 15 }}>
+                      <a
+                        target="sonar"
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
+                        bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <Image
                         className="nes-avatar is-medium "
                         alt="Gravatar image example"
@@ -281,21 +436,24 @@ export default function Home() {
                         height={100}
                         src="/api/m3ter-head/man"
                       />
-                      <span> ID: 13</span>
+                      <span> #13</span>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <p style={{ color: "gray" }}>
                         tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
                       </p>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
-                      <a href="https://sonar.warp.cc/#/app/contract/Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po?network=mainnet">
-                        Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po
+                    <td style={{ padding: 15 }}>
+                      <a
+                        target="sonar"
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
+                        bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <Image
                         className="nes-avatar is-medium "
                         alt="Gravatar image example"
@@ -303,21 +461,24 @@ export default function Home() {
                         height={100}
                         src="/api/m3ter-head/mars"
                       />
-                      <span> ID: 14</span>
+                      <span> #14</span>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <p style={{ color: "gray" }}>
                         tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
                       </p>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
-                      <a href="https://sonar.warp.cc/#/app/contract/Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po?network=mainnet">
-                        Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po
+                    <td style={{ padding: 15 }}>
+                      <a
+                        target="sonar"
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
+                        bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <Image
                         className="nes-avatar is-medium "
                         alt="Gravatar image example"
@@ -325,21 +486,24 @@ export default function Home() {
                         height={100}
                         src="/api/m3ter-head/cool"
                       />
-                      <span> ID: 15</span>
+                      <span> #15</span>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <p style={{ color: "gray" }}>
                         tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
                       </p>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
-                      <a href="https://sonar.warp.cc/#/app/contract/Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po?network=mainnet">
-                        Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po
+                    <td style={{ padding: 15 }}>
+                      <a
+                        target="sonar"
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
+                        bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <Image
                         className="nes-avatar is-medium "
                         alt="Gravatar image example"
@@ -347,21 +511,24 @@ export default function Home() {
                         height={100}
                         src="/api/m3ter-head/song"
                       />
-                      <span> ID: 16</span>
+                      <span> #16</span>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <p style={{ color: "gray" }}>
                         tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
                       </p>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
-                      <a href="https://sonar.warp.cc/#/app/contract/Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po?network=mainnet">
-                        Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po
+                    <td style={{ padding: 15 }}>
+                      <a
+                        target="sonar"
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
+                        bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <Image
                         className="nes-avatar is-medium "
                         alt="Gravatar image example"
@@ -369,74 +536,53 @@ export default function Home() {
                         height={100}
                         src="/api/m3ter-head/earth"
                       />
-                      <span> ID: 17</span>
+                      <span> #17</span>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
+                    <td style={{ padding: 15 }}>
                       <p style={{ color: "gray" }}>
                         tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
                       </p>
                     </td>
-                    <td style={{ paddingBlock: 15 }}>
-                      <a href="https://sonar.warp.cc/#/app/contract/Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po?network=mainnet">
-                        Jk_nQ5B8mfWmLoK71P1CAGvbWq9oKIlqKBJWSmUC4Po
+                    <td style={{ padding: 15 }}>
+                      <a
+                        target="sonar"
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
+                        bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div
-              className="nes-container is-dark"
-              style={{ borderColor: "#0000", paddingBlockStart: 20 }}
-            >
-              <div className="nes-field is-inline">
-                <input
-                  type="text"
-                  id="name_field"
-                  className="nes-input is-dark"
-                  placeholder="tokenID"
-                />
-                <button
-                  type="button"
-                  className="nes-btn is-warning"
-                  onClick={getProvider}
-                >
-                  + Add M3ter
-                </button>
-              </div>
-            </div>
           </div>
         </div>
-        <div className="nes-container with-title is-dark">
-          <h1 className="title">Activity Log</h1>
-          <div className="message-list">
-            <div className="message -left">
-              <Image
-                className="nes-avatar is-large"
-                alt="Gravatar image example"
-                width={100}
-                height={100}
-                src="/api/m3ter-head/ichristwin"
-              />
-              <div className="nes-balloon from-left is-dark">
-                <p style={{ color: "gray" }}>Hello M3tering protocol</p>
-              </div>
-            </div>
-
-            <div className="message -left">
-              <Image
-                className="nes-avatar is-large"
-                alt="Gravatar image example"
-                width={100}
-                height={100}
-                src="/api/m3ter-head/_"
-              />
-              <div className="nes-balloon from-left is-dark">
-                <p style={{ color: "gray" }}>Whatsup NES.css</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* <div className="nes-container" style={{ borderColor: "#0000", paddingBlock: 120}}>
+          <iframe
+            src="https://sonar.warp.cc/#/app/contracts?network=mainnet&dre=dre1"
+            height="800"
+            width="1800"
+            name="sonar"
+            id="frame"
+            style={{border:"none", display: "none"}}
+            title="Sonar: Warp contract explorer"
+          ></iframe>
+        </div> */}
+        <button
+          type="button"
+          id="scroll"
+          className="nes-btn"
+          onClick={scrollToTop}
+          style={{
+            display: "none",
+            position: "fixed",
+            bottom: 70,
+            right: 70,
+            zIndex: 99,
+          }}
+        >
+          <span>&#x2191;</span>
+        </button>
       </div>
     </div>
   );
