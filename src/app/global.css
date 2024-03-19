@@ -1,12 +1,25 @@
-body {
-    height: 100vh;
-    background-image: url("/8-bit-13.jpg");
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+body{
+  height: 100vh;
+  background-image: url("/8-bit-13.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
-#m3ter-data, .empty {
-    color: lime;
-    transition: content 0.5s ease-in-out;
-  }
-  
+#m3ter-data,
+.empty {
+  color: lime;
+  font-size: 15px;
+  transition: content 0.5s ease-in-out;
+}
+
+#nav {
+  font-size: 10px;
+  background-color: lightgray;
+  padding: 7px;
+  border-bottom: solid black;
+}
+
+.bbtn {
+  float: right;
+  background-color: red;
+}
