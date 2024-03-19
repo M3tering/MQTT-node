@@ -9,6 +9,7 @@ body{
 .empty {
   color: lime;
   font-size: 15px;
+  overflow-wrap: break-word;
   transition: content 0.5s ease-in-out;
 }
 

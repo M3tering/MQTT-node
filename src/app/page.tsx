@@ -3,7 +3,7 @@ import "./global.css";
 import "nes.css/css/nes.min.css";
 import Image from "next/image";
 import { ethers } from "ethers";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 let signer;
 let provider;
@@ -12,7 +12,7 @@ let meterData: string[] = new Array(15);
 meterData.fill("");
 
 export default function Home() {
-  let click = new Audio("/rclick-13693.mp3")
+  const clickRef = useRef<HTMLAudioElement>(null);
   const [isConnected, setConnection] = useState(false);
   const [isOpen, setOpen] = useState(false);
 
@@ -21,7 +21,7 @@ export default function Home() {
   function toggleApp(appId: string) {
     var app = document.getElementById(appId);
     var scroll = document.getElementById("scroll");
-    if (!app || !scroll ) return console.log("app not closed");
+    if (!app || !scroll) return console.log("app not closed");
     if (isOpen) {
       app.style.display = "none";
       scroll.style.display = "none";
@@ -31,7 +31,7 @@ export default function Home() {
       scroll.style.display = "block";
       setOpen(true);
     }
-    click.play();
+    if (clickRef.current) clickRef.current.play();
   }
   function generateDummyData() {
     const length = 35;
@@ -630,13 +630,13 @@ export default function Home() {
           <button className="nes-btn" onClick={(x) => toggleApp("google")}>
             _
           </button>
-          <div className="nes-container" style={{backgroundColor: "white"}}>
+          <div className="nes-container" style={{ backgroundColor: "white" }}>
             <iframe
               src="https://sonar.warp.cc"
               height="700"
               width="100%"
               name="google"
-              style={{borderColor: "#0000"}}
+              style={{ borderColor: "#0000" }}
               title="Google search"
             ></iframe>
           </div>
@@ -657,7 +657,8 @@ export default function Home() {
         >
           <span>&#x2191;</span>
         </button>
-              </div>
+        <audio ref={clickRef} src={"/rclick-13693.mp3"} />
+      </div>
     </div>
   );
 }
