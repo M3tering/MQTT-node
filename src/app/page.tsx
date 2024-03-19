@@ -8,6 +8,7 @@ import { useState } from "react";
 let signer;
 let provider;
 var date = new Date();
+let click = new Audio("/rclick-13693.mp3")
 let meterData: string[] = new Array(15);
 meterData.fill("");
 
@@ -30,6 +31,7 @@ export default function Home() {
       scroll.style.display = "block";
       setOpen(true);
     }
+    click.play();
   }
   function generateDummyData() {
     const length = 35;
@@ -655,7 +657,7 @@ export default function Home() {
         >
           <span>&#x2191;</span>
         </button>
-      </div>
+              </div>
     </div>
   );
 }
