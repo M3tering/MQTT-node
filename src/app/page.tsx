@@ -8,7 +8,7 @@ import { useState, useRef } from "react";
 let signer;
 let provider;
 var date = new Date();
-let meterData: string[] = new Array(10);
+let meterData: string[] = new Array(15);
 meterData.fill("");
 
 export default function Home() {
@@ -18,22 +18,26 @@ export default function Home() {
 
   const isBrowser = () => typeof window !== "undefined";
 
-  function toggleApp(appId: string) {
+  function toggleApp(appIds: string[]) {
     if (clickRef.current) clickRef.current.play();
+    var state = isOpen;
     var scroll = document.getElementById("scroll");
-    var app = document.getElementById(appId);
-    if (!app || !scroll) return console.log(`${appId} not closed`);
-    if (isOpen) {
-      setOpen(false);
-      app.style.display = "none";
-      scroll.style.display = "none";
-      console.log(`${appId} closed`);
-    } else {
-      setOpen(true);
-      app.style.display = "block";
-      scroll.style.display = "block";
-      console.log(`${appId} opened`);
-    }
+    appIds.forEach((appId) => {
+      var app = document.getElementById(appId);
+      if (!app || !scroll) return console.log(`${appId} not closed`);
+      if (state) {
+        app.style.display = "none";
+        scroll.style.display = "none";
+        console.log(`${appId} closed`);
+        state = false;
+      } else {
+        app.style.display = "block";
+        scroll.style.display = "block";
+        console.log(`${appId} opened`);
+        state = true;
+      }
+    });
+    setOpen(state);
   }
   function generateDummyData() {
     const length = 35;
@@ -112,7 +116,7 @@ export default function Home() {
                   <button
                     className="nes-btn"
                     onClick={(x) => {
-                      toggleApp("google");
+                      toggleApp(["google"]);
                     }}
                   >
                     <i className="nes-icon google is-large"></i>{" "}
@@ -132,7 +136,7 @@ export default function Home() {
                     className="nes-btn is-success"
                     style={{ backgroundColor: "black" }}
                     onClick={(x) => {
-                      toggleApp("stdout");
+                      toggleApp(["stdout"]);
                       startDataStream();
                     }}
                   >
@@ -153,7 +157,7 @@ export default function Home() {
                     <button
                       className="nes-btn"
                       style={{ backgroundColor: "#eee" }}
-                      onClick={(x) => toggleApp("m3ters")}
+                      onClick={(x) => toggleApp(["m3ters"])}
                     >
                       <div>
                         <Image
@@ -233,13 +237,13 @@ export default function Home() {
               <div>
                 <button
                   className="nes-btn is-error"
-                  onClick={(x) => toggleApp("m3ters")}
+                  onClick={(x) => toggleApp(["m3ters"])}
                 >
                   <i className="nes-icon close is-small"></i>
                 </button>
                 <button
                   className="nes-btn"
-                  onClick={(x) => toggleApp("m3ters")}
+                  onClick={(x) => toggleApp(["m3ters"])}
                 >
                   _
                 </button>
@@ -289,7 +293,13 @@ export default function Home() {
                       <span> #3</span>
                     </td>
                     <td>
-                      <a href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1">
+                      <a
+                        target="google"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "google"]);
+                        }}
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
@@ -306,7 +316,13 @@ export default function Home() {
                       <span> #4</span>
                     </td>
                     <td>
-                      <a href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1">
+                      <a
+                        target="google"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "google"]);
+                        }}
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
@@ -325,7 +341,13 @@ export default function Home() {
                       <span> #5</span>
                     </td>
                     <td>
-                      <a href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1">
+                      <a
+                        target="google"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "google"]);
+                        }}
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
@@ -342,7 +364,13 @@ export default function Home() {
                       <span> #6</span>
                     </td>
                     <td>
-                      <a href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1">
+                      <a
+                        target="google"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "google"]);
+                        }}
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
@@ -361,7 +389,13 @@ export default function Home() {
                       <span> #7</span>
                     </td>
                     <td>
-                      <a href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1">
+                      <a
+                        target="google"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "google"]);
+                        }}
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
@@ -378,7 +412,13 @@ export default function Home() {
                       <span> #8</span>
                     </td>
                     <td>
-                      <a href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1">
+                      <a
+                        target="google"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "google"]);
+                        }}
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
@@ -395,7 +435,13 @@ export default function Home() {
                       <span> #9</span>
                     </td>
                     <td>
-                      <a href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1">
+                      <a
+                        target="google"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "google"]);
+                        }}
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
@@ -412,7 +458,13 @@ export default function Home() {
                       <span> #10</span>
                     </td>
                     <td>
-                      <a href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1">
+                      <a
+                        target="google"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "google"]);
+                        }}
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
@@ -431,7 +483,13 @@ export default function Home() {
                       <span> #11</span>
                     </td>
                     <td>
-                      <a href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1">
+                      <a
+                        target="google"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "google"]);
+                        }}
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
@@ -448,7 +506,13 @@ export default function Home() {
                       <span> #12</span>
                     </td>
                     <td>
-                      <a href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1">
+                      <a
+                        target="google"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "google"]);
+                        }}
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
@@ -465,7 +529,13 @@ export default function Home() {
                       <span> #13</span>
                     </td>
                     <td>
-                      <a href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1">
+                      <a
+                        target="google"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "google"]);
+                        }}
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
@@ -482,7 +552,13 @@ export default function Home() {
                       <span> #14</span>
                     </td>
                     <td>
-                      <a href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1">
+                      <a
+                        target="google"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "google"]);
+                        }}
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
@@ -499,7 +575,13 @@ export default function Home() {
                       <span> #15</span>
                     </td>
                     <td>
-                      <a href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1">
+                      <a
+                        target="google"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "google"]);
+                        }}
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
@@ -516,7 +598,13 @@ export default function Home() {
                       <span> #16</span>
                     </td>
                     <td>
-                      <a href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1">
+                      <a
+                        target="google"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "google"]);
+                        }}
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
@@ -535,7 +623,13 @@ export default function Home() {
                       <span> #17</span>
                     </td>
                     <td>
-                      <a href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1">
+                      <a
+                        target="google"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "google"]);
+                        }}
+                        href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
+                      >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
                       </a>
                     </td>
@@ -552,11 +646,14 @@ export default function Home() {
             >
               <button
                 className="nes-btn is-error"
-                onClick={(x) => toggleApp("stdout")}
+                onClick={(x) => toggleApp(["stdout"])}
               >
                 <i className="nes-icon close is-small"></i>
               </button>
-              <button className="nes-btn" onClick={(x) => toggleApp("stdout")}>
+              <button
+                className="nes-btn"
+                onClick={(x) => toggleApp(["stdout"])}
+              >
                 _
               </button>
               <div className="nes-container is-dark" id="m3ter-data">
@@ -581,11 +678,11 @@ export default function Home() {
           <div className="nes-container" style={{ backgroundColor: "white" }}>
             <button
               className="nes-btn is-error"
-              onClick={(x) => toggleApp("google")}
+              onClick={(x) => toggleApp(["google"])}
             >
               <i className="nes-icon close is-small"></i>
             </button>
-            <button className="nes-btn" onClick={(x) => toggleApp("google")}>
+            <button className="nes-btn" onClick={(x) => toggleApp(["google"])}>
               _
             </button>
             <iframe
