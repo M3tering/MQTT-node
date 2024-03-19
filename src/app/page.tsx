@@ -8,11 +8,11 @@ import { useState } from "react";
 let signer;
 let provider;
 var date = new Date();
-let click = new Audio("/rclick-13693.mp3")
 let meterData: string[] = new Array(15);
 meterData.fill("");
 
 export default function Home() {
+  let click = new Audio("/rclick-13693.mp3")
   const [isConnected, setConnection] = useState(false);
   const [isOpen, setOpen] = useState(false);
 
