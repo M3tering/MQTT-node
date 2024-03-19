@@ -127,7 +127,6 @@ export default function Home() {
             </div>
 
             {/* Browser Icon */}
-
             <div>
               {isOpen ? (
                 ""
@@ -163,14 +162,14 @@ export default function Home() {
                           alt="Welcome"
                           width={60}
                           height={60}
-                          src="/api/m3ter-head/pretty"
+                          src={"/api/m3ter-head/pretty"}
                           className="nes-avatar"
                         />
                         <Image
                           alt="Welcome"
                           width={60}
                           height={60}
-                          src="/api/m3ter-head/new"
+                          src={"/api/m3ter-head/new"}
                           className="nes-avatar"
                         />
                       </div>
@@ -179,14 +178,14 @@ export default function Home() {
                           alt="Welcome"
                           width={60}
                           height={60}
-                          src="/api/m3ter-head/blob"
+                          src={"/api/m3ter-head/blob"}
                           className="nes-avatar"
                         />
                         <Image
                           alt="Welcome"
                           width={60}
                           height={60}
-                          src="/api/m3ter-head/now"
+                          src={"/api/m3ter-head/now"}
                           className="nes-avatar"
                         />
                       </div>
@@ -259,7 +258,7 @@ export default function Home() {
                         alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/strange"
+                        src={"/api/m3ter-head/strange"}
                       />
                       <span> #3</span>
                     </td>
@@ -279,7 +278,7 @@ export default function Home() {
                         alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/new"
+                        src={"/api/m3ter-head/new"}
                       />
                       <span> #4</span>
                     </td>
@@ -299,7 +298,7 @@ export default function Home() {
                         alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/world"
+                        src={"/api/m3ter-head/world"}
                       />
                       <span> #5</span>
                     </td>
@@ -319,7 +318,7 @@ export default function Home() {
                         alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/nice"
+                        src={"/api/m3ter-head/nice"}
                       />
                       <span> #6</span>
                     </td>
@@ -339,7 +338,7 @@ export default function Home() {
                         alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/crazy"
+                        src={"/api/m3ter-head/crazy"}
                       />
                       <span> #7</span>
                     </td>
@@ -359,7 +358,7 @@ export default function Home() {
                         alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/moon"
+                        src={"/api/m3ter-head/moon"}
                       />
                       <span> #8</span>
                     </td>
@@ -379,7 +378,7 @@ export default function Home() {
                         alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/odd"
+                        src={"/api/m3ter-head/odd"}
                       />
                       <span> #9</span>
                     </td>
@@ -399,7 +398,7 @@ export default function Home() {
                         alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/old"
+                        src={"/api/m3ter-head/old"}
                       />
                       <span> #10</span>
                     </td>
@@ -419,7 +418,7 @@ export default function Home() {
                         alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/space"
+                        src={"/api/m3ter-head/space"}
                       />
                       <span> #11</span>
                     </td>
@@ -439,7 +438,7 @@ export default function Home() {
                         alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/fine"
+                        src={"/api/m3ter-head/fine"}
                       />
                       <span> #12</span>
                     </td>
@@ -459,7 +458,7 @@ export default function Home() {
                         alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/man"
+                        src={"/api/m3ter-head/man"}
                       />
                       <span> #13</span>
                     </td>
@@ -479,7 +478,7 @@ export default function Home() {
                         alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/mars"
+                        src={"/api/m3ter-head/mars"}
                       />
                       <span> #14</span>
                     </td>
@@ -499,7 +498,7 @@ export default function Home() {
                         alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/cool"
+                        src={"/api/m3ter-head/cool"}
                       />
                       <span> #15</span>
                     </td>
@@ -519,7 +518,7 @@ export default function Home() {
                         alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/song"
+                        src={"/api/m3ter-head/song"}
                       />
                       <span> #16</span>
                     </td>
@@ -539,7 +538,7 @@ export default function Home() {
                         alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/earth"
+                        src={"/api/m3ter-head/earth"}
                       />
                       <span> #17</span>
                     </td>
