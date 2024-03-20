@@ -95,58 +95,18 @@ export default function Home() {
   return (
     <div>
       <div id="nav">
-        {date.toLocaleTimeString()}&#8192;&#8192;&#8192;&#8192;&#8192;&#8192;
+        &#8192;&#8192;&#8192;&#8192;&#8192;&#8192;
         <span>File</span>&#8192;&#8192;&#8192;&#8192;&#8192;&#8192;
         <span>Edit</span>&#8192;&#8192;&#8192;&#8192;&#8192;&#8192;
         <span>Help</span>
         <div className="bbtn">
-          <i className="nes-icon close is-small"></i>
+          {date.toLocaleTimeString()}&#8192;&#8192;&#8192;&#8192;&#8192;&#8192;
         </div>
       </div>
       <div>
         {/* Apps */}
-        <div className="nes-container" style={{ borderColor: "#0000" }}>
+        <div className="nes-container subtle">
           <div>
-            {/* Browser Icon */}
-            <div>
-              {isOpen ? (
-                ""
-              ) : (
-                <div style={{ float: "right" }}>
-                  <button
-                    className="nes-btn"
-                    onClick={(x) => {
-                      toggleApp(["google"]);
-                    }}
-                  >
-                    <i className="nes-icon google is-large"></i>{" "}
-                  </button>
-                  <p>browse</p>
-                </div>
-              )}
-            </div>
-
-            {/* Terminal Icon */}
-            <div>
-              {isOpen ? (
-                ""
-              ) : (
-                <div>
-                  <button
-                    className="nes-btn is-success"
-                    style={{ backgroundColor: "black" }}
-                    onClick={(x) => {
-                      toggleApp(["stdout"]);
-                      startDataStream();
-                    }}
-                  >
-                    <h1 style={{ fontSize: 36 }}>&gt;_</h1>
-                  </button>
-                  <p>stdout</p>
-                </div>
-              )}
-            </div>
-
             {/* M3ters Icon */}
             <div>
               <div>
@@ -213,23 +173,65 @@ export default function Home() {
               ) : (
                 <div style={{ float: "right" }}>
                   <a
-                    className="nes-btn"
-                    style={{ backgroundColor: "black" }}
-                    href="https://github.com/iChristwin/MQTT-node"
+                    className="nes-btn is-warning"
+                    target="browser"
+                    onClick={(x) => {
+                      toggleApp(["browser"]);
+                    }}
+                    href="https://basepaint.xyz/"
                   >
-                    <i className="nes-icon github is-large"></i>
+                    <i className="nes-icon heart is-medium"></i>
                   </a>
-                  <p>Github</p>
+                  <p>Paint</p>
+                </div>
+              )}
+            </div>
+
+            {/* Terminal Icon */}
+            <div>
+              {isOpen ? (
+                ""
+              ) : (
+                <div>
+                  <button
+                    className="nes-btn is-success"
+                    style={{ backgroundColor: "black" }}
+                    onClick={(x) => {
+                      toggleApp(["console"]);
+                      startDataStream();
+                    }}
+                  >
+                    <h1 style={{ fontSize: 26 }}>&gt;_</h1>
+                  </button>
+                  <p>console</p>
+                </div>
+              )}
+            </div>
+
+            {/* Browser Icon */}
+            <div>
+              {isOpen ? (
+                ""
+              ) : (
+                <div style={{ float: "right" }}>
+                  <button
+                    className="nes-btn"
+                    onClick={(x) => {
+                      toggleApp(["browser"]);
+                    }}
+                  >
+                    <i className="nes-icon google is-medium"></i>{" "}
+                  </button>
+                  <p>browse</p>
                 </div>
               )}
             </div>
 
             {/* M3ters Table */}
             <div
-              className="nes-table-responsive nes-container"
+              className="nes-table-responsive nes-container hidden"
               id="m3ters"
               style={{
-                display: "none",
                 backgroundColor: "white",
                 float: "left",
               }}
@@ -294,9 +296,9 @@ export default function Home() {
                     </td>
                     <td>
                       <a
-                        target="google"
+                        target="browser"
                         onClick={(x) => {
-                          toggleApp(["m3ters", "google"]);
+                          toggleApp(["m3ters", "browser"]);
                         }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
@@ -317,9 +319,9 @@ export default function Home() {
                     </td>
                     <td>
                       <a
-                        target="google"
+                        target="browser"
                         onClick={(x) => {
-                          toggleApp(["m3ters", "google"]);
+                          toggleApp(["m3ters", "browser"]);
                         }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
@@ -342,9 +344,9 @@ export default function Home() {
                     </td>
                     <td>
                       <a
-                        target="google"
+                        target="browser"
                         onClick={(x) => {
-                          toggleApp(["m3ters", "google"]);
+                          toggleApp(["m3ters", "browser"]);
                         }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
@@ -365,9 +367,9 @@ export default function Home() {
                     </td>
                     <td>
                       <a
-                        target="google"
+                        target="browser"
                         onClick={(x) => {
-                          toggleApp(["m3ters", "google"]);
+                          toggleApp(["m3ters", "browser"]);
                         }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
@@ -390,9 +392,9 @@ export default function Home() {
                     </td>
                     <td>
                       <a
-                        target="google"
+                        target="browser"
                         onClick={(x) => {
-                          toggleApp(["m3ters", "google"]);
+                          toggleApp(["m3ters", "browser"]);
                         }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
@@ -413,9 +415,9 @@ export default function Home() {
                     </td>
                     <td>
                       <a
-                        target="google"
+                        target="browser"
                         onClick={(x) => {
-                          toggleApp(["m3ters", "google"]);
+                          toggleApp(["m3ters", "browser"]);
                         }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
@@ -436,9 +438,9 @@ export default function Home() {
                     </td>
                     <td>
                       <a
-                        target="google"
+                        target="browser"
                         onClick={(x) => {
-                          toggleApp(["m3ters", "google"]);
+                          toggleApp(["m3ters", "browser"]);
                         }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
@@ -459,9 +461,9 @@ export default function Home() {
                     </td>
                     <td>
                       <a
-                        target="google"
+                        target="browser"
                         onClick={(x) => {
-                          toggleApp(["m3ters", "google"]);
+                          toggleApp(["m3ters", "browser"]);
                         }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
@@ -484,9 +486,9 @@ export default function Home() {
                     </td>
                     <td>
                       <a
-                        target="google"
+                        target="browser"
                         onClick={(x) => {
-                          toggleApp(["m3ters", "google"]);
+                          toggleApp(["m3ters", "browser"]);
                         }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
@@ -507,9 +509,9 @@ export default function Home() {
                     </td>
                     <td>
                       <a
-                        target="google"
+                        target="browser"
                         onClick={(x) => {
-                          toggleApp(["m3ters", "google"]);
+                          toggleApp(["m3ters", "browser"]);
                         }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
@@ -530,9 +532,9 @@ export default function Home() {
                     </td>
                     <td>
                       <a
-                        target="google"
+                        target="browser"
                         onClick={(x) => {
-                          toggleApp(["m3ters", "google"]);
+                          toggleApp(["m3ters", "browser"]);
                         }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
@@ -553,9 +555,9 @@ export default function Home() {
                     </td>
                     <td>
                       <a
-                        target="google"
+                        target="browser"
                         onClick={(x) => {
-                          toggleApp(["m3ters", "google"]);
+                          toggleApp(["m3ters", "browser"]);
                         }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
@@ -576,9 +578,9 @@ export default function Home() {
                     </td>
                     <td>
                       <a
-                        target="google"
+                        target="browser"
                         onClick={(x) => {
-                          toggleApp(["m3ters", "google"]);
+                          toggleApp(["m3ters", "browser"]);
                         }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
@@ -599,9 +601,9 @@ export default function Home() {
                     </td>
                     <td>
                       <a
-                        target="google"
+                        target="browser"
                         onClick={(x) => {
-                          toggleApp(["m3ters", "google"]);
+                          toggleApp(["m3ters", "browser"]);
                         }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
@@ -624,9 +626,9 @@ export default function Home() {
                     </td>
                     <td>
                       <a
-                        target="google"
+                        target="browser"
                         onClick={(x) => {
-                          toggleApp(["m3ters", "google"]);
+                          toggleApp(["m3ters", "browser"]);
                         }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
@@ -638,29 +640,22 @@ export default function Home() {
               </table>
             </div>
 
-            {/* Stdout Terminal */}
-            <div
-              className="nes-container is-dark"
-              id="stdout"
-              style={{ display: "none" }}
-            >
+            {/* console Terminal */}
+            <div className="nes-container is-dark hidden" id="console">
               <button
                 className="nes-btn is-error"
-                onClick={(x) => toggleApp(["stdout"])}
+                onClick={(x) => toggleApp(["console"])}
               >
                 <i className="nes-icon close is-small"></i>
               </button>
               <button
                 className="nes-btn"
-                onClick={(x) => toggleApp(["stdout"])}
+                onClick={(x) => toggleApp(["console"])}
               >
                 _
               </button>
               <div className="nes-container is-dark" id="m3ter-data">
-                <div
-                  className="nes-container is-dark is-centered"
-                  style={{ borderColor: "#0000" }}
-                >
+                <div className="nes-container is-dark is-centered subtle">
                   <h3 className="empty">Loading M3ter data...</h3>
                 </div>
               </div>
@@ -670,27 +665,20 @@ export default function Home() {
         </div>
 
         {/* google app */}
-        <div
-          className="nes-container"
-          id="google"
-          style={{ display: "none", borderColor: "#0000" }}
-        >
+        <div className="nes-container subtle hidden" id="browser">
           <div className="nes-container" style={{ backgroundColor: "white" }}>
             <button
               className="nes-btn is-error"
-              onClick={(x) => toggleApp(["google"])}
+              onClick={(x) => toggleApp(["browser"])}
             >
               <i className="nes-icon close is-small"></i>
             </button>
-            <button className="nes-btn" onClick={(x) => toggleApp(["google"])}>
+            <button className="nes-btn" onClick={(x) => toggleApp(["browser"])}>
               _
             </button>
             <iframe
-              src="https://sonar.warp.cc"
-              height="700"
-              width="100%"
-              name="google"
-              style={{ borderColor: "#0000" }}
+              src="https://www.wikipedia.org/"
+              name="browser"
               title="Google search"
             ></iframe>
           </div>

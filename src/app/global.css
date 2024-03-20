@@ -1,4 +1,4 @@
-body{
+body {
   height: 100vh;
   background-image: url("/8-bit-13.jpg");
   background-repeat: no-repeat;
@@ -22,5 +22,17 @@ body{
 
 .bbtn {
   float: right;
-  background-color: red;
+}
+
+iframe {
+  height: 700px;
+  width: 100%;
+}
+
+.subtle {
+  border-color: #0000 !important;
+}
+
+.hidden {
+  display: none;
 }
