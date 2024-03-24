@@ -1,34 +1,83 @@
 "use client";
+import "./global.css";
 import "nes.css/css/nes.min.css";
 import Image from "next/image";
 import { ethers } from "ethers";
-import { useState } from "react";
-import { Press_Start_2P } from "next/font/google";
+import { useState, useRef } from "react";
 
 let signer;
 let provider;
-const PS2P = Press_Start_2P({ weight: "400", subsets: ["latin"] });
+var date = new Date();
+let meterData: string[] = new Array(15);
+meterData.fill("");
 
 export default function Home() {
+  const clickRef = useRef<HTMLAudioElement>(null);
   const [isConnected, setConnection] = useState(false);
-  const [isTable, setTable] = useState(false);
+  const [isOpen, setOpen] = useState(false);
 
-  const isBrowser = () => typeof window !== "undefined"; //The approach recommended by Next.js
+  const isBrowser = () => typeof window !== "undefined";
 
-  function toggleTable() {
+  function toggleApp(appIds: string[]) {
+    if (clickRef.current) clickRef.current.play();
+    var state = isOpen;
     var scroll = document.getElementById("scroll");
-    var table = document.getElementById("m3ter-table");
-    if (!table || !scroll) return;
-    if (isTable) {
-      table.style.display = "none";
-      scroll.style.display = "none";
-      setTable(false);
-    } else {
-      table.style.display = "block";
-      scroll.style.display = "block";
-      setTable(true);
-    }
+    appIds.forEach((appId) => {
+      var app = document.getElementById(appId);
+      if (!app || !scroll) return console.log(`${appId} not closed`);
+      if (state) {
+        app.style.display = "none";
+        scroll.style.display = "none";
+        console.log(`${appId} closed`);
+        state = false;
+      } else {
+        app.style.display = "block";
+        scroll.style.display = "block";
+        console.log(`${appId} opened`);
+        state = true;
+      }
+    });
+    setOpen(state);
   }
+  function generateDummyData() {
+    const length = 35;
+    const characters =
+      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let signature = "";
+    for (let i = 0; i < length; i++) {
+      signature += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
+    }
+
+    var date_ = new Date();
+    const time = date_.toLocaleTimeString();
+    const tokenId = Math.round(Math.random() * 10);
+    const energy = (Math.random() * 10).toFixed(3) + "kwh";
+    return JSON.stringify({ time, tokenId, energy, signature });
+  }
+
+  function updateDisplay(data: string) {
+    meterData.shift();
+    meterData.push(data);
+    const displayedList = document.getElementById("m3ter-data");
+    if (displayedList) displayedList.innerHTML = ""; // Clear previous list items
+
+    // Loop through meterData and create list items
+    meterData.forEach((dataPoint) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = dataPoint;
+      if (displayedList) displayedList.appendChild(listItem);
+    });
+  }
+
+  function startDataStream() {
+    setInterval(() => {
+      const data = generateDummyData();
+      updateDisplay(data);
+    }, 3000);
+  }
+
   function scrollToTop() {
     if (!isBrowser()) return;
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -44,74 +93,49 @@ export default function Home() {
   };
 
   return (
-    <div className={PS2P.className} style={{ height: "100vh" }}>
-      <div
-        style={{
-          paddingBlockEnd: 500,
-          backgroundImage: `url("/8-bit-13.jpg")`,
-          backgroundRepeat: "no-repeat",
-          backgroundAttachment: "fixed",
-          backgroundSize: "100% 100%",
-        }}
-      >
-        <div
-          className="nes-container is-centered"
-          style={{
-            borderColor: "#0000",
-            paddingBlockStart: 40,
-            paddingBlockEnd: 90,
-          }}
-        >
-          <div className="message-list">
-            <div className="message -left">
-              <Image
-                alt="Welcome"
-                width={60}
-                height={60}
-                src="/twitter-avatar.png"
-                className="nes-avatar"
-                style={{ imageRendering: "pixelated", height: 300, width: 300 }}
-              />
-              <div className="nes-balloon from-left">
-                <h2>Hello there</h2>
-                <h3> 0x4f...319</h3>
-              </div>
-            </div>
-          </div>
+    <div>
+      <div id="nav">
+        &#8192;&#8192;&#8192;&#8192;&#8192;&#8192;
+        <span>File</span>&#8192;&#8192;&#8192;&#8192;&#8192;&#8192;
+        <span>Edit</span>&#8192;&#8192;&#8192;&#8192;&#8192;&#8192;
+        <span>Help</span>
+        <div className="bbtn">
+          {date.toLocaleTimeString()}&#8192;&#8192;&#8192;&#8192;&#8192;&#8192;
         </div>
-        <div
-          className="nes-container"
-          style={{ borderColor: "#0000", paddingBlockEnd: 120 }}
-        >
+      </div>
+      <div>
+        {/* Apps */}
+        <div className="nes-container subtle">
           <div>
+            {/* M3ters Icon */}
             <div>
               <div>
-                {isTable ? (
-                  <div style={{ float: "right" }}>
-                    <button className="nes-btn is-error" onClick={toggleTable}>
-                      <i className="nes-icon close is-small"></i>
-                    </button>
-                  </div>
+                {isOpen ? (
+                  ""
                 ) : (
-                  <div style={{ float: "right" }}>
+                  <div>
                     <button
                       className="nes-btn"
                       style={{ backgroundColor: "#eee" }}
-                      onClick={toggleTable}
+                      onClick={(x) => toggleApp(["m3ters"])}
                     >
                       <div>
                         <Image
                           alt="Welcome"
                           width={60}
                           height={60}
-                          src="/api/m3ter-head/pretty"
+                          src={
+                            "https://mqtt-node.vercel.app/api/m3ter-head/pretty"
+                          }
                           className="nes-avatar"
                         />
                         <Image
                           alt="Welcome"
                           width={60}
                           height={60}
-                          src="/api/m3ter-head/new"
+                          src={
+                            "https://mqtt-node.vercel.app/api/m3ter-head/new"
+                          }
                           className="nes-avatar"
                         />
                       </div>
@@ -120,14 +144,18 @@ export default function Home() {
                           alt="Welcome"
                           width={60}
                           height={60}
-                          src="/api/m3ter-head/blob"
+                          src={
+                            "https://mqtt-node.vercel.app/api/m3ter-head/blob"
+                          }
                           className="nes-avatar"
                         />
                         <Image
                           alt="Welcome"
                           width={60}
                           height={60}
-                          src="/api/m3ter-head/now"
+                          src={
+                            "https://mqtt-node.vercel.app/api/m3ter-head/now"
+                          }
                           className="nes-avatar"
                         />
                       </div>
@@ -138,64 +166,140 @@ export default function Home() {
               </div>
             </div>
 
-            <div
-              className="nes-table-responsive"
-              id="m3ter-table"
-              style={{ padding: "auto", display: "none" }}
-            >
-              <div className="nes-container" style={{ borderColor: "#0000" }}>
-                <div className="nes-field is-inline">
-                  <input
-                    type="text"
-                    id="name_field"
-                    className="nes-input"
-                    placeholder="tokenId"
-                  />
-                  <button
-                    type="button"
+            {/* Github Icon */}
+            <div>
+              {isOpen ? (
+                ""
+              ) : (
+                <div style={{ float: "right" }}>
+                  <a
                     className="nes-btn is-warning"
-                    onClick={getProvider}
+                    target="browser"
+                    onClick={(x) => {
+                      toggleApp(["browser"]);
+                    }}
+                    href="https://basepaint.xyz/"
                   >
-                    + Add M3ter
-                  </button>
-                  <label style={{ textAlign: "center" }}>
-                    <input
-                      type="checkbox"
-                      className="nes-checkbox"
-                      defaultChecked={false}
-                    />
-                    <span>sudo</span>
-                  </label>
+                    <i className="nes-icon heart is-medium"></i>
+                  </a>
+                  <p>Paint</p>
                 </div>
+              )}
+            </div>
+
+            {/* Terminal Icon */}
+            <div>
+              {isOpen ? (
+                ""
+              ) : (
+                <div>
+                  <button
+                    className="nes-btn is-success"
+                    style={{ backgroundColor: "black" }}
+                    onClick={(x) => {
+                      toggleApp(["console"]);
+                      startDataStream();
+                    }}
+                  >
+                    <h1 style={{ fontSize: 26 }}>&gt;_</h1>
+                  </button>
+                  <p>console</p>
+                </div>
+              )}
+            </div>
+
+            {/* Browser Icon */}
+            <div>
+              {isOpen ? (
+                ""
+              ) : (
+                <div style={{ float: "right" }}>
+                  <button
+                    className="nes-btn"
+                    onClick={(x) => {
+                      toggleApp(["browser"]);
+                    }}
+                  >
+                    <i className="nes-icon google is-medium"></i>{" "}
+                  </button>
+                  <p>browse</p>
+                </div>
+              )}
+            </div>
+
+            {/* M3ters Table */}
+            <div
+              className="nes-table-responsive nes-container hidden"
+              id="m3ters"
+              style={{
+                backgroundColor: "white",
+                float: "left",
+              }}
+            >
+              <div>
+                <button
+                  className="nes-btn is-error"
+                  onClick={(x) => toggleApp(["m3ters"])}
+                >
+                  <i className="nes-icon close is-small"></i>
+                </button>
+                <button
+                  className="nes-btn"
+                  onClick={(x) => toggleApp(["m3ters"])}
+                >
+                  _
+                </button>
+              </div>
+              <div className="nes-field is-inline">
+                <input
+                  type="text"
+                  id="tokenId_input"
+                  className="nes-input"
+                  placeholder="tokenId"
+                />
+                <button
+                  type="button"
+                  className="nes-btn is-warning"
+                  onClick={getProvider}
+                >
+                  + Add M3ter
+                </button>
+                <label>
+                  <input
+                    type="checkbox"
+                    className="nes-checkbox"
+                    defaultChecked={false}
+                  />
+                  <span>sudo</span>
+                </label>
               </div>
               <table className="nes-table is-bordered">
                 <thead className="nes-container is-centered">
                   <tr>
-                    <th>M3ter</th>
-                    <th>Public Key</th>
+                    <th>TokenId</th>
                     <th>Warp Contract</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <Image
-                        className="nes-avatar is-medium "
-                        alt="Gravatar image example"
+                        className="nes-avatar is-medium"
+                        alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/strange"
+                        src={
+                          "https://mqtt-node.vercel.app/api/m3ter-head/strange"
+                        }
                       />
                       <span> #3</span>
                     </td>
-                    <td style={{ padding: 15 }}>
-                      <p style={{ color: "gray" }}>
-                        tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
-                      </p>
-                    </td>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <a
-                        target="sonar"
+                        target="browser"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "browser"]);
+                        }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
@@ -203,24 +307,22 @@ export default function Home() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <Image
-                        className="nes-avatar is-medium "
-                        alt="Gravatar image example"
+                        className="nes-avatar is-medium"
+                        alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/new"
+                        src={"https://mqtt-node.vercel.app/api/m3ter-head/new"}
                       />
                       <span> #4</span>
                     </td>
-                    <td style={{ padding: 15 }}>
-                      <p style={{ color: "gray" }}>
-                        tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
-                      </p>
-                    </td>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <a
-                        target="sonar"
+                        target="browser"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "browser"]);
+                        }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
@@ -228,24 +330,24 @@ export default function Home() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <Image
-                        className="nes-avatar is-medium "
-                        alt="Gravatar image example"
+                        className="nes-avatar is-medium"
+                        alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/world"
+                        src={
+                          "https://mqtt-node.vercel.app/api/m3ter-head/world"
+                        }
                       />
                       <span> #5</span>
                     </td>
-                    <td style={{ padding: 15 }}>
-                      <p style={{ color: "gray" }}>
-                        tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
-                      </p>
-                    </td>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <a
-                        target="sonar"
+                        target="browser"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "browser"]);
+                        }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
@@ -253,24 +355,22 @@ export default function Home() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <Image
-                        className="nes-avatar is-medium "
-                        alt="Gravatar image example"
+                        className="nes-avatar is-medium"
+                        alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/nice"
+                        src={"https://mqtt-node.vercel.app/api/m3ter-head/nice"}
                       />
                       <span> #6</span>
                     </td>
-                    <td style={{ padding: 15 }}>
-                      <p style={{ color: "gray" }}>
-                        tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
-                      </p>
-                    </td>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <a
-                        target="sonar"
+                        target="browser"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "browser"]);
+                        }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
@@ -278,24 +378,24 @@ export default function Home() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <Image
-                        className="nes-avatar is-medium "
-                        alt="Gravatar image example"
+                        className="nes-avatar is-medium"
+                        alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/crazy"
+                        src={
+                          "https://mqtt-node.vercel.app/api/m3ter-head/crazy"
+                        }
                       />
                       <span> #7</span>
                     </td>
-                    <td style={{ padding: 15 }}>
-                      <p style={{ color: "gray" }}>
-                        tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
-                      </p>
-                    </td>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <a
-                        target="sonar"
+                        target="browser"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "browser"]);
+                        }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
@@ -303,24 +403,22 @@ export default function Home() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <Image
-                        className="nes-avatar is-medium "
-                        alt="Gravatar image example"
+                        className="nes-avatar is-medium"
+                        alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/moon"
+                        src={"https://mqtt-node.vercel.app/api/m3ter-head/moon"}
                       />
                       <span> #8</span>
                     </td>
-                    <td style={{ padding: 15 }}>
-                      <p style={{ color: "gray" }}>
-                        tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
-                      </p>
-                    </td>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <a
-                        target="sonar"
+                        target="browser"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "browser"]);
+                        }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
@@ -328,24 +426,22 @@ export default function Home() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <Image
-                        className="nes-avatar is-medium "
-                        alt="Gravatar image example"
+                        className="nes-avatar is-medium"
+                        alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/odd"
+                        src={"https://mqtt-node.vercel.app/api/m3ter-head/odd"}
                       />
                       <span> #9</span>
                     </td>
-                    <td style={{ padding: 15 }}>
-                      <p style={{ color: "gray" }}>
-                        tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
-                      </p>
-                    </td>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <a
-                        target="sonar"
+                        target="browser"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "browser"]);
+                        }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
@@ -353,24 +449,22 @@ export default function Home() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <Image
-                        className="nes-avatar is-medium "
-                        alt="Gravatar image example"
+                        className="nes-avatar is-medium"
+                        alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/old"
+                        src={"https://mqtt-node.vercel.app/api/m3ter-head/old"}
                       />
                       <span> #10</span>
                     </td>
-                    <td style={{ padding: 15 }}>
-                      <p style={{ color: "gray" }}>
-                        tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
-                      </p>
-                    </td>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <a
-                        target="sonar"
+                        target="browser"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "browser"]);
+                        }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
@@ -378,24 +472,24 @@ export default function Home() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <Image
-                        className="nes-avatar is-medium "
-                        alt="Gravatar image example"
+                        className="nes-avatar is-medium"
+                        alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/space"
+                        src={
+                          "https://mqtt-node.vercel.app/api/m3ter-head/space"
+                        }
                       />
                       <span> #11</span>
                     </td>
-                    <td style={{ padding: 15 }}>
-                      <p style={{ color: "gray" }}>
-                        tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
-                      </p>
-                    </td>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <a
-                        target="sonar"
+                        target="browser"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "browser"]);
+                        }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
@@ -403,24 +497,22 @@ export default function Home() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <Image
-                        className="nes-avatar is-medium "
-                        alt="Gravatar image example"
+                        className="nes-avatar is-medium"
+                        alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/fine"
+                        src={"https://mqtt-node.vercel.app/api/m3ter-head/fine"}
                       />
                       <span> #12</span>
                     </td>
-                    <td style={{ padding: 15 }}>
-                      <p style={{ color: "gray" }}>
-                        tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
-                      </p>
-                    </td>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <a
-                        target="sonar"
+                        target="browser"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "browser"]);
+                        }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
@@ -428,24 +520,22 @@ export default function Home() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <Image
-                        className="nes-avatar is-medium "
-                        alt="Gravatar image example"
+                        className="nes-avatar is-medium"
+                        alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/man"
+                        src={"https://mqtt-node.vercel.app/api/m3ter-head/man"}
                       />
                       <span> #13</span>
                     </td>
-                    <td style={{ padding: 15 }}>
-                      <p style={{ color: "gray" }}>
-                        tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
-                      </p>
-                    </td>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <a
-                        target="sonar"
+                        target="browser"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "browser"]);
+                        }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
@@ -453,24 +543,22 @@ export default function Home() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <Image
-                        className="nes-avatar is-medium "
-                        alt="Gravatar image example"
+                        className="nes-avatar is-medium"
+                        alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/mars"
+                        src={"https://mqtt-node.vercel.app/api/m3ter-head/mars"}
                       />
                       <span> #14</span>
                     </td>
-                    <td style={{ padding: 15 }}>
-                      <p style={{ color: "gray" }}>
-                        tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
-                      </p>
-                    </td>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <a
-                        target="sonar"
+                        target="browser"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "browser"]);
+                        }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
@@ -478,24 +566,22 @@ export default function Home() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <Image
-                        className="nes-avatar is-medium "
-                        alt="Gravatar image example"
+                        className="nes-avatar is-medium"
+                        alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/cool"
+                        src={"https://mqtt-node.vercel.app/api/m3ter-head/cool"}
                       />
                       <span> #15</span>
                     </td>
-                    <td style={{ padding: 15 }}>
-                      <p style={{ color: "gray" }}>
-                        tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
-                      </p>
-                    </td>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <a
-                        target="sonar"
+                        target="browser"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "browser"]);
+                        }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
@@ -503,24 +589,22 @@ export default function Home() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <Image
-                        className="nes-avatar is-medium "
-                        alt="Gravatar image example"
+                        className="nes-avatar is-medium"
+                        alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/song"
+                        src={"https://mqtt-node.vercel.app/api/m3ter-head/song"}
                       />
                       <span> #16</span>
                     </td>
-                    <td style={{ padding: 15 }}>
-                      <p style={{ color: "gray" }}>
-                        tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
-                      </p>
-                    </td>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <a
-                        target="sonar"
+                        target="browser"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "browser"]);
+                        }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
@@ -528,24 +612,24 @@ export default function Home() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <Image
-                        className="nes-avatar is-medium "
-                        alt="Gravatar image example"
+                        className="nes-avatar is-medium"
+                        alt="m3ter-head avatar"
                         width={100}
                         height={100}
-                        src="/api/m3ter-head/earth"
+                        src={
+                          "https://mqtt-node.vercel.app/api/m3ter-head/earth"
+                        }
                       />
                       <span> #17</span>
                     </td>
-                    <td style={{ padding: 15 }}>
-                      <p style={{ color: "gray" }}>
-                        tOD4Q4wmlAFBRLATgPk0TDCDfIkRduBwEE6MRsC51M0
-                      </p>
-                    </td>
-                    <td style={{ padding: 15 }}>
+                    <td>
                       <a
-                        target="sonar"
+                        target="browser"
+                        onClick={(x) => {
+                          toggleApp(["m3ters", "browser"]);
+                        }}
                         href="https://sonar.warp.cc/#/app/contract/bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec?network=mainnet&dre=dre1"
                       >
                         bI0xZfhTbn6Na4UFARhHFKbbHVZ4FJlKqqaPD8cQRec
@@ -555,19 +639,51 @@ export default function Home() {
                 </tbody>
               </table>
             </div>
+
+            {/* console Terminal */}
+            <div className="nes-container is-dark hidden" id="console">
+              <button
+                className="nes-btn is-error"
+                onClick={(x) => toggleApp(["console"])}
+              >
+                <i className="nes-icon close is-small"></i>
+              </button>
+              <button
+                className="nes-btn"
+                onClick={(x) => toggleApp(["console"])}
+              >
+                _
+              </button>
+              <div className="nes-container is-dark" id="m3ter-data">
+                <div className="nes-container is-dark is-centered subtle">
+                  <h3 className="empty">Loading M3ter data...</h3>
+                </div>
+              </div>
+              <span></span>
+            </div>
           </div>
         </div>
-        {/* <div className="nes-container" style={{ borderColor: "#0000", paddingBlock: 120}}>
-          <iframe
-            src="https://sonar.warp.cc/#/app/contracts?network=mainnet&dre=dre1"
-            height="800"
-            width="1800"
-            name="sonar"
-            id="frame"
-            style={{border:"none", display: "none"}}
-            title="Sonar: Warp contract explorer"
-          ></iframe>
-        </div> */}
+
+        {/* google app */}
+        <div className="nes-container subtle hidden" id="browser">
+          <div className="nes-container" style={{ backgroundColor: "white" }}>
+            <button
+              className="nes-btn is-error"
+              onClick={(x) => toggleApp(["browser"])}
+            >
+              <i className="nes-icon close is-small"></i>
+            </button>
+            <button className="nes-btn" onClick={(x) => toggleApp(["browser"])}>
+              _
+            </button>
+            <iframe
+              src="https://www.wikipedia.org/"
+              name="browser"
+              title="Google search"
+            ></iframe>
+          </div>
+        </div>
+
         <button
           type="button"
           id="scroll"
@@ -583,6 +699,7 @@ export default function Home() {
         >
           <span>&#x2191;</span>
         </button>
+        <audio ref={clickRef} src={"/rclick-13693.mp3"} />
       </div>
     </div>
   );
